@@ -1,7 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
-
+var crypto = require('crypto');
 var app = express();
 app.use(morgan('combined'));
 
@@ -20,6 +20,19 @@ app.get('/article1',function(req,res){
 app.get('/ui/madi.png', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'madi.png'));
 });
+app.get('/hash/:input',function(req,res){
+    var HashedString= hash(req.params.input,'HashedString');
+    res.send(HashedString);
+});
+function hash(input,salt){
+    var hashed=crypto.pbkdf2Sync(input,salt,10000,512,'sha512');
+    return hashed.tostring('hex'); 
+    
+    
+    
+}
+
+
 
 
 // Do not change port, otherwise your app won't run on IMAD servers
